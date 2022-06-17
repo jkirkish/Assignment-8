@@ -20,7 +20,7 @@ public class Assignment8App {
 
 		List<Integer> allNumbers = Collections.synchronizedList(new ArrayList<>(1000));
 
-		ExecutorService executor = Executors.newCachedThreadPool();
+		ExecutorService executor = Executors.newFixedThreadPool(12);
 
 		List<CompletableFuture<Void>> tasks = new ArrayList<>(1000);
 
