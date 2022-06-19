@@ -2,6 +2,7 @@ package com.coderscampus.Assignment8;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -13,15 +14,16 @@ import java.util.stream.Stream;
 
 public class Assignment8App {
 
-	public static void main(String[] args) {
+	public static synchronized void main(String[] args) {
 
 		Assignment8 assignment8 = new Assignment8();
 		ExecuService execute = new ExecuService();
 
 		List<Integer> allNumbers = Collections.synchronizedList(new ArrayList<>(1000));
 
-		ExecutorService executor = Executors.newFixedThreadPool(12);
-
+		//ExecutorService executor = Executors.newFixedThreadPool(175);
+		ExecutorService executor = Executors.newCachedThreadPool();
+        
 		List<CompletableFuture<Void>> tasks = new ArrayList<>(1000);
 
 		for (int i = 0; i < 1000; i++) {
@@ -37,11 +39,15 @@ public class Assignment8App {
 			}
 		}
 
+		
+		
 		Map<Integer, Integer> output = allNumbers.stream()
 				.collect(Collectors.toMap(i -> i, i -> 1, (oldValue, newValue) -> oldValue + 1));
 		System.out.println(output);
 		execute.runNumberFilter(allNumbers);
 		execute.runExecutorStats(executor);
+		
+		executor.shutdown();
 	}
 
 }
